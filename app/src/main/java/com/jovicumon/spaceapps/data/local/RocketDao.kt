@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface RocketDao {
 
     @Query("SELECT * FROM rockets ORDER BY name")
-    fun getAllRockets(): kotlinx.coroutines.flow.Flow<List<RocketEntity>>
+    fun getAllRockets(): Flow<List<RocketEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(rockets: List<RocketEntity>)
@@ -18,7 +18,6 @@ interface RocketDao {
     @Query("DELETE FROM rockets")
     suspend fun clearAll()
 
-    // 🔁 Lo usaré para la pantalla de detalle
     @Query("SELECT * FROM rockets WHERE id = :id LIMIT 1")
     suspend fun getRocketById(id: String): RocketEntity?
 }

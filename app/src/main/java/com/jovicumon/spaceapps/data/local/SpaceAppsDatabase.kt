@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [RocketEntity::class],
-    version = 2, // subo versión porque he cambiado las columnas
+    version = 3, // subo versión porque he cambiado columnas varias veces
     exportSchema = false
 )
 abstract class SpaceAppsDatabase : RoomDatabase() {
@@ -26,7 +26,7 @@ abstract class SpaceAppsDatabase : RoomDatabase() {
                     SpaceAppsDatabase::class.java,
                     "spaceapps_db"
                 )
-                    // Para esta práctica me vale borrar y recrear la BD si cambia el schema
+                    // borrar y recrear la BD en cada cambio de schema
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

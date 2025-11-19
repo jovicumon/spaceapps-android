@@ -25,12 +25,12 @@ class RocketRepository(
         return rocketDao.getAllRockets().first()
     }
 
-    // 🔁 (lo usaremos en el detalle)
+    // Lo usaremos para detalle si hiciera falta
     suspend fun getRocketById(rocketId: String): RocketEntity? {
         return rocketDao.getRocketById(rocketId)
     }
 
-    // DTO -> Entity con todos los campos que necesito
+    // DTO -> Entity con todos los campos
     private fun RocketDto.toEntity(): RocketEntity {
         return RocketEntity(
             id = this.id,
@@ -39,7 +39,11 @@ class RocketRepository(
             description = this.description,
             firstFlight = this.firstFlight,
             successRatePct = this.successRatePct,
-            wikipedia = this.wikipedia
+            wikipedia = this.wikipedia,
+            country = this.country,
+            stages = this.stages,
+            costPerLaunch = this.costPerLaunch,
+            imageUrl = this.flickrImages?.firstOrNull() // cojo solo la primera imagen
         )
     }
 }

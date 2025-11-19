@@ -27,6 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,14 +77,24 @@ fun RocketsListScreen(
                 .padding(16.dp)
         ) {
             when (uiState) {
+
+                // 🔵 ESTADO DE CARGA (Loading)
                 is RocketsUiState.Loading -> {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            // El contenido es un anuncio de estado para accesibilidad
+                            .semantics {
+                                liveRegion = LiveRegionMode.Assertive
+                            },
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.semantics {
+                                contentDescription = "Cargando cohetes"
+                            }
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = "Cargando cohetes...",
@@ -89,17 +103,22 @@ fun RocketsListScreen(
                     }
                 }
 
+                // 🔴 ESTADO DE ERROR
                 is RocketsUiState.Error -> {
-                    val message = (uiState as RocketsUiState.Error).message
+                    val message = "Error al cargar. Verifica tu conexión."
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .semantics {
+                                liveRegion = LiveRegionMode.Assertive
+                                contentDescription = message
+                            },
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = message,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Button(
@@ -110,24 +129,36 @@ fun RocketsListScreen(
                     }
                 }
 
+                // ⚪ ESTADO VACÍO (sin cohetes en la BD)
                 is RocketsUiState.Empty -> {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .semantics {
+                                liveRegion = LiveRegionMode.Polite
+                                contentDescription = "No se han encontrado cohetes. Intenta actualizar más tarde."
+                            },
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "No se han encontrado cohetes. Intenta actualizar más tarde.",
+                            text = "No se han encontrado cohetes.",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Intenta actualizar más tarde.",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
 
+                // ✅ ESTADO SUCCESS (lista cargada)
                 is RocketsUiState.Success -> {
                     Column(
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        // Campo de búsqueda
                         OutlinedTextField(
                             value = searchText,
                             onValueChange = { searchText = it },
@@ -138,6 +169,7 @@ fun RocketsListScreen(
 
                         Spacer(modifier = Modifier.height(12.dp))
 
+                        // Filtro "solo activos"
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -155,13 +187,25 @@ fun RocketsListScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         if (filteredRockets.isEmpty()) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
+                            // 🟡 ESTADO "SIN RESULTADOS"
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .semantics {
+                                        liveRegion = LiveRegionMode.Polite
+                                        contentDescription = "Sin resultados para la búsqueda actual."
+                                    },
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
+                                    text = "🔍",
+                                    style = MaterialTheme.typography.headlineMedium
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
                                     text = "Sin resultados para la búsqueda actual",
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         } else {
