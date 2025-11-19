@@ -81,4 +81,12 @@ Incluye:
 - **StateFlow para estados de UI**
 - **Sealed classes** para representar estados
 - **One Source Of Truth** con Room como base de datos
+  
+---
+
+  ## ▶ Instalación y ejecución
+
+1. Clona el repositorio:
+```bash
+git clone https://github.com/jovicumon/spaceapps-android.git
 
