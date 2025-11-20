@@ -24,13 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,11 +42,27 @@ fun RocketsListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    RocketsListContent(
+        uiState = uiState,
+        onLogout = onLogout,
+        onRetry = { viewModel.refreshRockets() },
+        onRocketClick = onRocketClick
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RocketsListContent(
+    uiState: RocketsUiState,
+    onLogout: () -> Unit,
+    onRetry: () -> Unit,
+    onRocketClick: (RocketUiModel) -> Unit
+) {
     var searchText by remember { mutableStateOf("") }
     var showOnlyActive by remember { mutableStateOf(false) }
 
     val rockets = when (uiState) {
-        is RocketsUiState.Success -> (uiState as RocketsUiState.Success).rockets
+        is RocketsUiState.Success -> uiState.rockets
         else -> emptyList()
     }
 
@@ -83,7 +100,6 @@ fun RocketsListScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            // El contenido es un anuncio de estado para accesibilidad
                             .semantics {
                                 liveRegion = LiveRegionMode.Assertive
                             },
@@ -122,7 +138,7 @@ fun RocketsListScreen(
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Button(
-                            onClick = { viewModel.refreshRockets() }
+                            onClick = { onRetry() }
                         ) {
                             Text("Reintentar")
                         }
@@ -176,6 +192,7 @@ fun RocketsListScreen(
                             Switch(
                                 checked = showOnlyActive,
                                 onCheckedChange = { showOnlyActive = it },
+                                modifier = Modifier.testTag("activeSwitch"), // 👈 TAG PARA TEST
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = MaterialTheme.colorScheme.primary
                                 )
@@ -187,7 +204,7 @@ fun RocketsListScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         if (filteredRockets.isEmpty()) {
-                            // 🟡 ESTADO "SIN RESULTADOS"
+                            // 🟡 ESTADO "SIN RESULTADOS" (búsqueda sin matches)
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()

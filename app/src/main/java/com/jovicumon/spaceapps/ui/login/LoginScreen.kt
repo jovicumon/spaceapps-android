@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag      // 👈 IMPORTANTE
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -28,25 +29,20 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     onLoginSuccess: () -> Unit
 ) {
-    // Estados para los campos del formulario
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Estados para posibles mensajes de error en los campos
     var emailError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
 
-    // Snackbar para avisar de credenciales incorrectas
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     val context = LocalContext.current
 
-    // Pequeña función para validar el formulario
     fun validateForm(): Boolean {
         var isValid = true
 
-        // Valido el email mínimamente (no vacío y con "@")
         if (email.isBlank()) {
             emailError = "El email no puede estar vacío"
             isValid = false
@@ -57,7 +53,6 @@ fun LoginScreen(
             emailError = null
         }
 
-        // Valido la contraseña (no vacía y algo de longitud)
         if (password.isBlank()) {
             passwordError = "La contraseña no puede estar vacía"
             isValid = false
@@ -98,7 +93,9 @@ fun LoginScreen(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Email") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("emailField"),   // 👈 TAG PARA TEST
                     isError = emailError != null,
                     singleLine = true
                 )
@@ -117,7 +114,9 @@ fun LoginScreen(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Contraseña") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("passwordField"),   // 👈 TAG PARA TEST
                     isError = passwordError != null,
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation()
@@ -135,17 +134,13 @@ fun LoginScreen(
                 // Botón de login
                 Button(
                     onClick = {
-                        // Primero valido formulario
                         if (validateForm()) {
-                            // Aquí compruebo credenciales "de mentira" para la práctica
-                            // Si quiero, puedo cambiar estos valores por otros.
                             val validEmail = "admin@lasalle.es"
                             val validPassword = "admin1234"
 
                             if (email == validEmail && password == validPassword) {
                                 onLoginSuccess()
                             } else {
-                                // Si las credenciales no coinciden, aviso por snackbar
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
                                         message = "Credenciales incorrectas"
@@ -154,17 +149,17 @@ fun LoginScreen(
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("loginButton")   // 👈 TAG PARA TEST
                 ) {
                     Text("Iniciar sesión")
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Botón "He olvidado mis datos de acceso"
                 TextButton(
                     onClick = {
-                        // Abro una URL en el navegador.
                         val uri = Uri.parse("https://lasallefp.com/contactar/")
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         context.startActivity(intent)
