@@ -18,5 +18,5 @@ keystore.properties
 *.jks
 *.keystore
 app/build/
-*.abb
+*.aab
 app/release
