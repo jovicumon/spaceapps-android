@@ -58,20 +58,21 @@ La app utiliza un icono ic_launcher personalizado, basado en un cohete en estilo
 Se han generado todas las resoluciones necesarias (mdpi → xxxhdpi), incluyendo su versión redonda (ic_launcher_round).
 
 📸 Capturas de pantalla
+
 🛰 Splash animado
-<p align="center">
+<p>
   <img src="docs/splash.png" width="350">
 </p>
 🔐 Pantalla de login
-<p align="center">
+<p>
   <img src="docs/login.png" width="350">
 </p>
 🚀 Lista de cohetes
-<p align="center">
+<p>
   <img src="docs/lista.png" width="350">
 </p>
 📄 Detalle del cohete (CS04)
-<p align="center">
+<p>
   <img src="docs/detalle.png" width="350">
 </p>
 🔗 Código fuente
