@@ -64,17 +64,21 @@ Se han generado todas las resoluciones necesarias (mdpi → xxxhdpi), incluyendo
   <img src="docs/splash.png" width="350">
 </p>
 🔐 Pantalla de login
+
 <p>
   <img src="docs/login.png" width="350">
 </p>
 🚀 Lista de cohetes
+
 <p>
   <img src="docs/lista.png" width="350">
 </p>
-📄 Detalle del cohete (CS04)
+📄 Detalle del cohete
+
 <p>
   <img src="docs/detalle.png" width="350">
 </p>
+
 🔗 Código fuente
 Repositorio oficial del proyecto:
 👉 https://github.com/jovicumon/spaceapps-android
