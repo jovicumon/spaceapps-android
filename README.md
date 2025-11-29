@@ -19,6 +19,7 @@ Validación de email y contraseña.
 Usuario permitido:
 
 admin@lasalle.es
+
 admin1234
 
 
@@ -110,6 +111,7 @@ Incluye dos pruebas automatizadas:
 Verifica que introducir:
 
 admin@lasalle.es
+
 admin1234
 
 
@@ -154,10 +156,7 @@ Keystore creada con alias spaceapps_launch.
 
 Configurada firma del build release desde keystore.properties.
 
-.aab generado correctamente:
-
-app/build/outputs/bundle/release/app-release.aab
-
+.aab generado correctamente
 
 La keystore NO está subida al repo (cumple requisitos de seguridad).
 
@@ -165,20 +164,6 @@ La keystore NO está subida al repo (cumple requisitos de seguridad).
 
 La ficha completa está documentada en:
 👉 PLAY_STORE.md
-
-Incluye:
-
-Nombre
-
-Descripción breve
-
-Descripción completa
-
-Icono
-
-Capturas de pantalla
-
-URL del repositorio
 
 🔗 Repositorio
 
